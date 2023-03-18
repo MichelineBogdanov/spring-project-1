@@ -21,6 +21,7 @@ public class TaskController {
     public ModelAndView allTasks() {
         ModelAndView modelAndView = new ModelAndView();
         List<Task> all = taskService.getAll();
+        all.forEach(System.out::println);
         modelAndView.setViewName("tasks");
         modelAndView.addObject("all", all);
         return modelAndView;

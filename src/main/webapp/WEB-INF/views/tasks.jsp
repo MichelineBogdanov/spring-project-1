@@ -1,12 +1,12 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>FILMS</title>
+    <title>TASKS</title>
 </head>
 <body>
 
-<h2>Films</h2>
+<h2>TASKS</h2>
 <table>
     <tr>
         <th>id</th>

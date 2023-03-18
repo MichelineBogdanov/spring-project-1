@@ -1,8 +1,10 @@
 package com.javarush.services;
 
 import com.javarush.entity.Task;
-import com.javarush.repository.TaskRepository;
+import com.javarush.repository.TaskDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,30 +12,31 @@ import java.util.Optional;
 @Service
 public class TaskService {
 
-    private final TaskRepository taskRepository;
+    private final TaskDao taskDao;
 
-    public TaskService(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public TaskService(@Autowired TaskDao taskDao) {
+        this.taskDao = taskDao;
     }
 
+    @Transactional
     public List<Task> getAll() {
-        return taskRepository.getAll();
+        return taskDao.findAll();
     }
 
-    public Optional<Task> findById(long id) {
-        return taskRepository.findById(id);
+    public Optional<Task> findById(Integer id) {
+        return taskDao.findById(id);
     }
 
     public Task save(Task task) {
-        return taskRepository.save(task);
+        return taskDao.save(task);
     }
 
-    public Task update(Task task) {
-        return taskRepository.update(task);
-    }
+    /*public Task update(Task task) {
+        return taskDao.update(task);
+    }*/
 
     public void delete(Task task) {
-        taskRepository.delete(task);
+        taskDao.delete(task);
     }
 
 }
