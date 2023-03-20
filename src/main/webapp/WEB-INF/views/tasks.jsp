@@ -7,7 +7,7 @@
 <body>
 
 <h2>TASKS</h2>
-<table>
+<table border="1" cellpadding="5">
     <tr>
         <th>id</th>
         <th>description</th>
@@ -26,8 +26,16 @@
     </c:forEach>
 </table>
 
-<%--<h2>Add</h2>
-<c:url value="/edit" var="add"/>
-<a href="${edit}">Add new task</a>--%>
+<br>
+<c:forEach begin="1" end="${pagesCount}" step="1" varStatus="i">
+    <c:url value="/" var="url">
+        <c:param name="page" value="${i.index}"/>
+        <c:param name="size" value="5"/>
+    </c:url>
+    <a href="${url}">${i.index}</a>
+</c:forEach>
+
+<h2>Add</h2>
+<a href="/add">Add new task</a>
 </body>
 </html>

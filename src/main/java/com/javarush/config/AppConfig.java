@@ -1,7 +1,8 @@
 package com.javarush.config;
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.hibernate.cfg.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +21,22 @@ import java.util.Properties;
 @PropertySource(value = "classpath:application.properties")
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.javarush.repository")
-@EntityScan(basePackages = "com.javarush.entity")
 public class AppConfig {
+
+    @Value("${spring.datasource.driver-class-name}")
+    private String driver;
+
+    @Value("${spring.datasource.url}")
+    private String url;
+
+    @Value("${spring.datasource.username}")
+    private String userName;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+    @Value("${hibernate.dialect}")
+    private String dialect;
 
     @Bean
     public LocalSessionFactoryBean entityManagerFactory() {
@@ -29,33 +44,30 @@ public class AppConfig {
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan("com.javarush");
         sessionFactory.setHibernateProperties(hibernateProperties());
-
+        sessionFactory.setAnnotatedPackages("com.javarush.entity");
         return sessionFactory;
     }
 
     @Bean
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/todo");
-        dataSource.setUsername("root");
-        dataSource.setPassword("mysql");
-
+        dataSource.setDriverClassName(driver);
+        dataSource.setUrl(url);
+        dataSource.setUsername(userName);
+        dataSource.setPassword(password);
         return dataSource;
     }
 
     @Bean
     public PlatformTransactionManager transactionManager() {
-        HibernateTransactionManager transactionManager
-                = new HibernateTransactionManager();
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(entityManagerFactory().getObject());
         return transactionManager;
     }
 
-    private final Properties hibernateProperties() {
+    private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
-        hibernateProperties.setProperty(
-                "hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        hibernateProperties.put(Environment.DIALECT, dialect);
         return hibernateProperties;
     }
 
